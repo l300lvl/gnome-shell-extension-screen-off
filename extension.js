@@ -4,11 +4,11 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const Util = imports.misc.util;
 
-function DoIt() {
+function ScreenOff() {
     this._init();
 }
 
-DoIt.prototype = {
+ScreenOff.prototype = {
     _button: null,
 
     _init: function() {
@@ -17,7 +17,7 @@ DoIt.prototype = {
 
         let icon = new St.Icon({ icon_name: 'process-stop',
                                  icon_type: St.IconType.FULLCOLOR,
-                                 icon_size: Main.panel.button.height});
+                                  icon_size: 17});
 
         icon.reactive = true;
         icon.connect('button-press-event', Lang.bind(this, function () {
@@ -34,5 +34,27 @@ DoIt.prototype = {
 };
 
 function main() {
-    new DoIt();
+    new ScreenOff();
+}
+function init(extensionMeta) {
+    // do nothing here
+}
+
+function enable() {
+    let role = 'screen-off';
+
+    if(Main.panel._status_area_order.indexOf(role) == -1) {
+        Main.panel._status_area_order.unshift(role);
+        Main.panel._status_area_shell_implementation[role] = ScreenOff;
+    
+        let constructor = Main.panel._status_area_shell_implementation[role];
+        let indicator = new constructor();
+        Main.panel.addToStatusArea(role, indicator, 0);
+    } else {
+        Main.panel._statusArea['screen-off'].actor.show();
+    }
+}
+
+function disable() {
+    Main.panel._statusArea['screen-off'].actor.hide();
 }
