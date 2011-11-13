@@ -1,1 +1,1 @@
-{"shell-version": ["3.0.2"], "uuid": "screen_off@xtranophilist", "name": "Screen Off", "description": "Turns the screen off in a single click fro Gnome shell panel!", "url": "http://motorscript.com"}
+{"shell-version": ["3.0.2", "3.1.91", "3.1.92", "3.2"], "uuid": "screen-off@xtranophilist", "name": "Screen Off", "description": "Turns the screen off in a single click fro Gnome shell panel!", "url": "http://motorscript.com/gnome-shell-extension-screen-turn-off-button/"}
