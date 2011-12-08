@@ -2,16 +2,21 @@ const Lang = imports.lang;
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
 const Util = imports.misc.util;
+//gnome 3.0
+const Panel = imports.ui.panel;
 
 function ScreenOff() {
     this._init();
 }
 
 ScreenOff.prototype = {
-    _button: null,
+     __proto__: PanelMenu.SystemStatusButton.prototype,
 
     _init: function() {
+
+    PanelMenu.SystemStatusButton.prototype._init.call(this,'screen-off');
 
         this._button = new St.BoxLayout({ name: 'screen-off'});
 
@@ -40,21 +45,20 @@ function init(extensionMeta) {
     // do nothing here
 }
 
-function enable() {
-    let role = 'screen-off';
+//gnome3.0
+function main() {
+    Panel.STANDARD_TRAY_ICON_ORDER.unshift('screen-off');
+    Panel.STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION['screen-off'] = ScreenOff;
+}
 
-    if(Main.panel._status_area_order.indexOf(role) == -1) {
-        Main.panel._status_area_order.unshift(role);
-        Main.panel._status_area_shell_implementation[role] = ScreenOff;
-    
-        let constructor = Main.panel._status_area_shell_implementation[role];
-        let indicator = new constructor();
-        Main.panel.addToStatusArea(role, indicator, 0);
-    } else {
-        Main.panel._statusArea['screen-off'].actor.show();
-    }
+let indicator;
+
+function enable() {
+    indicator = new ScreenOff();
+    Main.panel.addToStatusArea('screen-off', indicator);
 }
 
 function disable() {
-    Main.panel._statusArea['screen-off'].actor.hide();
+    indicator.destroy();
+    indicator = null;
 }
